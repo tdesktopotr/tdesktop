@@ -8,28 +8,15 @@ RUN apt-get update \
     && locale-gen en_US.UTF-8 \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && apt-get clean
+ENV LANG=en_US.UTF-8
 RUN echo "----------- INIT STEP ---------- DONE ----------"
 
 RUN echo "----------- USERADD STEP ----------"
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
     && sed -i.bkp -e 's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/ALL ALL=NOPASSWD:ALL/g' /etc/sudoers \
     && usermod -aG sudo gitpod
-RUN echo "----------- USERADD STEP ---------- DONE ----------"
-ENV LANG=en_US.UTF-8
-RUN echo "----------- PYTHON STEP ----------"
-ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
-RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
-    && { echo; \
-        echo 'eval "$(pyenv init -)"'; \
-        echo 'eval "$(pyenv virtualenv-init -)"'; } >> .bashrc \
-    && pyenv install 3.6.6 \
-    && pyenv global 3.6.6 \
-    && pip install virtualenv pipenv python-language-server[all]==0.19.0 \
-    && rm -rf /tmp/*
-RUN echo "----------- PYTHON STEP ---------- DONE ----------"
-
-RUN echo "----------- STEP WITH C++  ----------"
-
+RUN echo "----------- USERADD STEP ---------- DONE ----------" \
+    && echo "----------- STEP WITH C++  ----------"
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-add-repository -yu "deb http://apt.llvm.org/cosmic/ llvm-toolchain-cosmic-6.0 main" \
     && apt-get install -y \
@@ -48,6 +35,18 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 RUN echo "----------- STEP WITH C++ ---------- DONE ----------"
+
+RUN echo "----------- PYTHON STEP ----------"
+ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
+RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
+    && { echo; \
+        echo 'eval "$(pyenv init -)"'; \
+        echo 'eval "$(pyenv virtualenv-init -)"'; } >> .bashrc \
+    && pyenv install 3.6.6 \
+    && pyenv global 3.6.6 \
+    && pip install virtualenv pipenv python-language-server[all]==0.19.0 \
+    && rm -rf /tmp/*
+RUN echo "----------- PYTHON STEP ---------- DONE ----------"
 
 USER gitpod
 ENV HOME=/home/gitpod

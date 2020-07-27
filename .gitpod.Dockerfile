@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 
 RUN echo "----------- INIT STEP ----------"
 ENV DEBIAN_FRONTEND=noninteractive
@@ -18,10 +18,9 @@ RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
 RUN echo "----------- USERADD STEP ---------- DONE ----------" \
     && echo "----------- STEP WITH C++  ----------"
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && apt-add-repository 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main' \
+    && apt-add-repository 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main' \
     && apt-get update -y \
-    && apt-get install -y clang-6.0 libllvm6.0 libstdc++6 libclang1-6.0 clang-format-6.0 clang-tools-6.0 cmake \
-    && apt-get update -y \
+    && apt-get install -y llvm-6.0 clang-6.0 clang-format-6.0 clang-tools-6.0 cmake \
     && ln -s /usr/bin/clangd-6.0 /usr/bin/clangd \
     && apt-get install -y git libexif-dev liblzma-dev libz-dev libssl-dev libgtk2.0-dev libice-dev libsm-dev libicu-dev \
         libdrm-dev dh-autoreconf autoconf automake libxml2-dev libass-dev libfreetype6-dev libgpac-dev libsdl1.2-dev \

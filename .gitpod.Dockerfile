@@ -11,7 +11,6 @@ RUN sudo apt-get update && \
         rust-lldb
 
 ENV RUST_LLDB=/usr/bin/lldb-8
-ENV MAKE_THREADS_CNT=-j8
 
 RUN sudo apt-get install software-properties-common -y && \
     sudo apt-get install git libexif-dev liblzma-dev libz-dev libssl-dev \

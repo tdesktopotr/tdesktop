@@ -1,6 +1,5 @@
-FROM buildpack-deps:cosmic
+FROM ubuntu:14.04
 
-### base ###
 RUN yes | unminimize \
     && apt-get install -y \
         asciidoctor \
@@ -19,6 +18,9 @@ RUN yes | unminimize \
     && locale-gen en_US.UTF-8 \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 ENV LANG=en_US.UTF-8
+RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.utf8
 
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
     && sed -i.bkp -e 's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/ALL ALL=NOPASSWD:ALL/g' /etc/sudoers \

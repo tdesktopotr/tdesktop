@@ -1,8 +1,10 @@
 FROM ubuntu:14.04
 
 RUN echo "----------- INIT STEP ----------"
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get update \
-    && apt-get install -y locales bash-completion build-essential less man-db nano software-properties-common sudo vim \
+    && apt-get install -y curl dialog apt-utils locales bash-completion build-essential less man-db nano software-properties-common sudo vim \
     && locale-gen en_US.UTF-8 \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && apt-get clean

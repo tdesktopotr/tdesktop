@@ -18,7 +18,7 @@ RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
 RUN echo "----------- USERADD STEP ---------- DONE ----------" \
     && echo "----------- STEP WITH C++  ----------"
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && apt-add-repository -yu 'deb http://apt.llvm.org/cosmic/ llvm-toolchain-cosmic-6.0 main' \
+    && apt-add-repository 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main' \
     && apt-get update -y \
     && apt-get install -y \
         clang-format-6.0 \
